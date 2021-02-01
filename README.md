@@ -26,11 +26,12 @@ Para gerar o pacote final que vai para produção:
   npm run build
 ```
 
-### Info
+## Info
 
 This repository is using [Parcel](https://parceljs.org/getting_started.html) to bundle this application.
 
-### Licença
+
+## Licença
 
 Copyright @ 2021 Guiabolso
 
