@@ -1,7 +1,7 @@
 {
-  "name": "@guiabolsobr/forseti",
+  "name": "@guiabolsobr/guiabolso-connect-start",
   "version": "1.0.0",
-  "description": "Experiência embedada do Guiabolso Connect.",
+  "description": "O Guiabolso Connect Start é um script para facilitar a integração do Guiabolso Connect, seja através de uma experiência embedada ou através de um botão de fácil acesso parao Guiabolso Connect.",
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build 'index.html' --dist-dir 'build' --no-source-maps",
