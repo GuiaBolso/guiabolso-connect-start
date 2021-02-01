@@ -4,3 +4,5 @@ build
 .cache
 .parcel-cache
 coverage
+.env
+.env.local
