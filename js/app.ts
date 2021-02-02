@@ -1,4 +1,4 @@
-import qs from 'query-string';
+import * as qs from 'query-string';
 
 import { verifyCSP } from './utils';
 
@@ -90,7 +90,7 @@ export const gbConnect = () => {
         </style>
       `;
 
-    $body.insertAdjacentHTML(
+    $body?.insertAdjacentHTML(
       'beforeend',
       `<div id="gbc-style">
         ${buttonStyle}
@@ -156,7 +156,7 @@ export const gbConnect = () => {
     const isGBCOrigin = message?.origin === GBC_URL;
 
     if (isGBCOrigin && hasAuthCode) {
-      $iframe.remove();
+      $iframe?.remove();
     }
   };
 
