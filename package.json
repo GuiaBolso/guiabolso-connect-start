@@ -1,24 +1,35 @@
 {
   "name": "@guiabolsobr/guiabolso-connect-start",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "O Guiabolso Connect Start é um script para facilitar a integração do Guiabolso Connect, seja através de uma experiência embedada ou através de um botão de fácil acesso parao Guiabolso Connect.",
+  "main": "build/app.js",
   "scripts": {
     "start": "parcel index.html --open",
-    "build": "parcel build 'index.html' --dist-dir 'build' --no-source-maps",
+    "build": "parcel build 'index.html' --dist-dir 'build'",
+    "production": "parcel build './js/app.ts' --dist-dir 'build' --no-source-maps --no-content-hash",
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gbprojectbr/forseti.git"
+    "url": "git+https://github.com/GuiaBolso/guiabolso-connect-start.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "Guiabolso Connect",
+    "Connect",
+    "Connect Start",
+    "Guiabolso Start",
+    "Guiabolso Connect Start"
+  ],
+  "author": "Guiabolso <frontmonstrao@guiabolso.com.br>",
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/gbprojectbr/forseti/issues"
+    "url": "https://github.com/GuiaBolso/guiabolso-connect-start/issues"
   },
-  "homepage": "https://github.com/gbprojectbr/forseti#readme",
+  "homepage": "https://github.com/GuiaBolso/guiabolso-connect-start#readme",
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
