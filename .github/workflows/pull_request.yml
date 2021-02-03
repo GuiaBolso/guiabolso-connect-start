@@ -1,8 +1,10 @@
-name: On master & Publish
+name: Pull Request on master
 
 on:
-  push:
-    branches: [master, next]
+  pull_request:
+    branches:
+      - master
+    types: [opened, reopened, synchronize]
 
 jobs:
   dependencies:
@@ -29,9 +31,37 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Npm Install
+      - name: Install Dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm install
+
+  build:
+    name: Build applications & libraries
+    runs-on: ubuntu-latest
+    needs: dependencies
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Restore cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: |-
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Run builders
+        run: npm run production -- --base=origin/master --head=${{ github.event.pull_request.head.ref }}
 
   lint:
     name: Linter
@@ -40,7 +70,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
 
       - run: git fetch --no-tags --prune --depth=5 origin master
 
@@ -64,7 +95,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Run linting
-        run: npm run lint -- --base=origin/master~1
+        run: npm run lint -- --base=origin/master --head=${{ github.event.pull_request.head.ref }}
 
   test:
     name: Test applications & libraries
@@ -73,7 +104,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
 
       - run: git fetch --no-tags --prune --depth=5 origin master
 
@@ -97,46 +129,4 @@ jobs:
             ${{ runner.os }}-
 
       - name: Run tests
-        run: npm run test -- --base=origin/master~1
-
-  publish:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    name: Publish
-    runs-on: ubuntu-latest
-    needs: [test, lint]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: master
-
-      - run: git fetch --no-tags --prune --depth=5 origin master
-
-      - name: Setup Node.js with Npm Package Registry
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-
-      - name: Restore cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: |-
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Run builders Affected. Run many?
-        run: npm run production
-
-        # run: npm run affected:build -- --base=origin/master~1 --prod --with-deps
-      - name: Run Semantic Release
-        run: npm run semantic-release
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run test -- --base=origin/master --head=${{ github.event.pull_request.head.ref }}
