@@ -18,9 +18,9 @@
 
 **No caso de mudança de layout, como estava antes e qual a mudança esperada?**
 
-|    Layout ANTES da alteração    |    Layout DEPOIS da alteração    |
-| :-----------------------------: | :------------------------------: |
-| ![Layout ANTES](#URL_DA-IMAGEM) | ![Layout DEPOIS](#URL_DA-IMAGEM) |
+|      Layout ANTES da alteração       |      Layout DEPOIS da alteração      |
+| :----------------------------------: | :----------------------------------: |
+| <!-- ![Layout ANTES](#URL_DA-IMAGEM) | ![Layout DEPOIS](#URL_DA-IMAGEM) --> |
 
 **No caso de refactoring, houve adição/remoção de código? (Além da mudança do código de lugar)**
 
