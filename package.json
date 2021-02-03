@@ -1,6 +1,6 @@
 {
   "name": "@guiabolsobr/guiabolso-connect-start",
-  "version": "1.0.13",
+  "version": "0.0.0-development",
   "description": "O Guiabolso Connect Start é um script para facilitar a integração do Guiabolso Connect, seja através de uma experiência embedada ou através de um botão de fácil acesso parao Guiabolso Connect.",
   "main": "build/app.js",
   "types": "build/app.d.ts",
@@ -10,14 +10,15 @@
     "build": "parcel build './js/app.ts' --dist-dir 'build'  --no-source-maps",
     "production": "parcel build './js/app.ts' --dist-dir 'build'  --no-source-maps --no-content-hash",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "semantic-release": "semantic-release"
   },
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GuiaBolso/guiabolso-connect-start.git"
+    "url": "https://github.com/GuiaBolso/guiabolso-connect-start.git"
   },
   "keywords": [
     "Guiabolso Connect",
@@ -43,7 +44,8 @@
     "babel-jest": "^26.6.3",
     "jest": "^26.6.3",
     "parcel": "^2.0.0-beta.1",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "semantic-release": "^17.3.7"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
