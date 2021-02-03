@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Run builders
-        run: npm run production -- --head=${{ github.event.pull_request.head.ref }}
+        run: npm run production
 
   lint:
     name: Linter
@@ -95,7 +95,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Run linting
-        run: npm run lint -- --head=${{ github.event.pull_request.head.ref }}
+        run: npm run lint
 
   test:
     name: Test applications
@@ -129,4 +129,4 @@ jobs:
             ${{ runner.os }}-
 
       - name: Run tests
-        run: npm run test -- --head=${{ github.event.pull_request.head.ref }}
+        run: npm run test
