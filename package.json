@@ -11,6 +11,7 @@
     "production": "parcel build './js/app.ts' --dist-dir 'build'  --no-source-maps --no-content-hash",
     "test": "jest",
     "test:watch": "jest --watchAll",
+    "commit": "npx git-cz",
     "semantic-release": "semantic-release"
   },
   "publishConfig": {
