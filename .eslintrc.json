@@ -12,7 +12,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "semi": "off",
-    "comma-dangle": "off"
+    // "semi": "off",
+    // "comma-dangle": "off"
   }
 }
