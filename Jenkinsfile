@@ -1,3 +1,5 @@
+@Library('gb-libs@feature/GBSRE-1057') _
+
 // If is a merge to master.
 if (env.BRANCH_NAME == "master") {
     ciKubernetesDeploy {
