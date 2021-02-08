@@ -138,8 +138,8 @@ Caso a sua página esteja minimamente aderente com as Políticas de Segurança n
 
 ### Apresentando a experiência completa de maneira embedada
 
-https://user-images.githubusercontent.com/3269950/107271432-fcf4bb80-6a2a-11eb-8e31-38c845737421.mov
+![guiabolso-connect-start__conexao-com-botao](https://user-images.githubusercontent.com/3269950/107272829-07b05000-6a2d-11eb-8acf-d17d321b96f0.gif)
 
 ### Apresentando a experiência com o botão de conexão
 
-https://user-images.githubusercontent.com/3269950/107271454-05e58d00-6a2b-11eb-981b-a839442cc567.mov
+![guiabolso-connect-start__experiencia-embedada](https://user-images.githubusercontent.com/3269950/107272838-0b43d700-6a2d-11eb-8835-c32c53c0235c.gif)
