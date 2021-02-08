@@ -136,10 +136,11 @@ Abaixo o exemplo está no HTML para contemplar tudo o que deve ser feito:
 Com tudo isso configurado, você deve conseguir visualizar o resultado no container que você definiu.
 Caso a sua página esteja minimamente aderente com as Políticas de Segurança nível 2 (`Content-Security-Policy - CSP Level 2`) você conseguirá visualizar a experiência completa do Guiabolso Connect embedada dentro da página, do contrário, você verá o botão de conexão do Guiabolso Connect.
 
-### Apresentando a experiência completa de maneira embedada
+### Apresentando a experiência completa de maneira embedada e o botão de conexão
 
-![guiabolso-connect-start__conexao-com-botao](https://user-images.githubusercontent.com/3269950/107272829-07b05000-6a2d-11eb-8acf-d17d321b96f0.gif)
+<br />
 
-### Apresentando a experiência com o botão de conexão
-
-![guiabolso-connect-start__experiencia-embedada](https://user-images.githubusercontent.com/3269950/107272838-0b43d700-6a2d-11eb-8835-c32c53c0235c.gif)
+<!-- prettier-ignore -->
+| Experiência embedada | Conexão com o botão |
+| -------------------- | ------------------- |
+| ![guiabolso-connect-start__conexao-com-botao](https://user-images.githubusercontent.com/3269950/107272829-07b05000-6a2d-11eb-8acf-d17d321b96f0.gif) | ![guiabolso-connect-start__experiencia-embedada](https://user-images.githubusercontent.com/3269950/107272838-0b43d700-6a2d-11eb-8835-c32c53c0235c.gif) |
