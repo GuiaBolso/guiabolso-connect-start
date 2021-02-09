@@ -23,7 +23,7 @@ export const gbConnect = () => {
   };
 
   const openPopup = (url: string) => {
-    url && window.open(url, 'gbConnectWindow', 'width=992,height=800');
+    url && window.open(url, 'gbConnectWindow', 'width=992,height=820');
   };
 
   const addStyleInPage = () => {
