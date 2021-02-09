@@ -11,8 +11,8 @@ Você pode encontrar e itilizar usar o nosso script:
 - [Nosso repositório do GitHub](https://github.com/GuiaBolso/guiabolso-connect-start#readme)
 - [Diretamente do NPM](https://www.npmjs.com/package/@guiabolsobr/guiabolso-connect-start) através do comando `npm i @guiabolsobr/guiabolso-connect-start`
 - Ou via CDN:
-  - [jsdelivr](https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.1.0/build/app.min.js)
-  - [AWS](https://connect-start.guiabolso.com.br/)
+  - https://connect-start.guiabolso.com.br/app.min.js
+  - https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.1.0/build/app.min.js
 
 <br />
 
