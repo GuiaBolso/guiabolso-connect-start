@@ -43,7 +43,7 @@ window.addEventListener('load', () => {
 
 ### Parâmetros de configuração:
 
-A função start espera um `objeto` com as configurações para que a aplicação seja iniciada. São eles:
+A função `start` espera um objeto do tipo `accessParameters` com as configurações para que a aplicação seja iniciada. São eles:
 
 <br />
 
@@ -144,3 +144,14 @@ Caso a sua página esteja minimamente aderente com as Políticas de Segurança n
 | Experiência embedada | Conexão com o botão |
 | -------------------- | ------------------- |
 | ![guiabolso-connect-start__conexao-com-botao](https://user-images.githubusercontent.com/3269950/107272829-07b05000-6a2d-11eb-8acf-d17d321b96f0.gif) | ![guiabolso-connect-start__experiencia-embedada](https://user-images.githubusercontent.com/3269950/107272838-0b43d700-6a2d-11eb-8835-c32c53c0235c.gif) |
+
+## Funções auxiliares:
+
+<br />
+
+<!-- prettier-ignore -->
+| Função            | Descrição                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------- |
+| `createAccessUrl` | Recebe os `parâmetros de configuração` e retorna uma URL válida para acesso ao Guiabolso Connect. |
+| `renderButton`    | Recebe os `parâmetros de configuração` e um `container` que é um elemento html onde o botão será renderizado.<br />Adicionalmente, é possível configurar o botão através do parâmetro `buttonConfig`, onde é possível alterar a `label` do botão e definir se o `icon`, deve ser exibido ou não. |
+| `renderIframe`    | Recebe os `parâmetros de configuração` e um `container` que é um elemento html onde o iframe será renderizado. Adicionalmente é possível configurar o iframe através do parâmetro `iframeConfig`, onde é possível alterar o `height` e o `width` do iframe. |
