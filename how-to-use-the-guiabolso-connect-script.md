@@ -12,7 +12,7 @@ Você pode encontrar e itilizar usar o nosso script:
 - [Diretamente do NPM](https://www.npmjs.com/package/@guiabolsobr/guiabolso-connect-start) através do comando `npm i @guiabolsobr/guiabolso-connect-start`
 - Ou via CDN:
   - [jsdelivr](https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.1.0/build/app.min.js)
-  - AWS - #To-do: Colocar o link do nosso CDN
+  - [AWS](https://connect-start.guiabolso.com.br/)
 
 <br />
 
@@ -47,15 +47,16 @@ A função `start` espera um objeto do tipo `accessParameters` com as configura�
 
 <br />
 
-| Parâmetros necessários | Valores possíveis                 | Observação                                                                                |
-| ---------------------- | --------------------------------- | ----------------------------------------------------------------------------------------- |
-| `cpf` \*               | 99999999999                       | Número do CPF do usuário<br />**Somente números**                                         |
-| `email`                | email-do-usuario@email.com.br     | Email do usuário                                                                          |
-| `phone`                | 11999999999                       | Número de telefone do usuário<br />**Somente números**                                    |
-| `clientId` \*          | id-recebido-do-guiabolso-connect  | ID recebido ao contratar o serviço                                                        |
-| `callbackURL` \*       | https://url-de-callback.com.br/   | URL para redirecionar o usuário depois da Conexão com o Guiabolso Connect                 |
-| `fallbackURL` \*       | https://url-de-fallback.com.br/   | Caso ocorra um erro e/ou o usuário queira sair da aplicação, mandaremos ele para essa URL |
-| `userTrackingId` \*    | um-identificador-unico-do-cliente | Um identificador fornecido pelo cliente afim de trackear os usuários dele                 |
+<!-- prettier-ignore -->
+| Parâmetros necessários | Exemplo de valores                     | Descrição                                          |
+| ---------------------- | -------------------------------------- | -------------------------------------------------- |
+| `cpf` \*               | 99999999999                            | Número do CPF do usuário<br />**Somente números**  |
+| `email`                | email-do-usuario@email.com.br          | Email do usuário                                   |
+| `phone`                | 11999999999                            | Número de telefone do usuário com DDD<br />**Somente números** |
+| `clientId` \*          | id-recebido-do-guiabolso-connect       | ID da sua chave de API recebido ao contratar o serviço do Guiabolsoo Conect |
+| `callbackURL` \*       | https://url-de-callback.com.br/        | Redirecionaremos o usuário para essa URL logo após ele fazer a conexão com o Guiabolso Connect |
+| `fallbackURL` \*       | https://url-de-fallback.com.br/        | Caso ocorra um erro e/ou o usuário queira sair da aplicação, mandaremos ele para essa URL      |
+| `userTrackingId` \*    | `273117c3-e374-436c-a7ad-adba544872ba` | Esse ID do usuário deve ser único e não sensível, ou seja, não use o CPF do usuário aqui mas use um UUID, por exemplo.<br />Essa informação será usada para rastrearmos seu usuário dentro da nossa plataforma. |
 
 **_\* parâmetros obrigatórios_**
 
@@ -145,13 +146,15 @@ Caso a sua página esteja minimamente aderente com as Políticas de Segurança n
 | -------------------- | ------------------- |
 | ![guiabolso-connect-start__conexao-com-botao](https://user-images.githubusercontent.com/3269950/107272829-07b05000-6a2d-11eb-8acf-d17d321b96f0.gif) | ![guiabolso-connect-start__experiencia-embedada](https://user-images.githubusercontent.com/3269950/107272838-0b43d700-6a2d-11eb-8835-c32c53c0235c.gif) |
 
+<br />
+
 ## Funções auxiliares:
 
 <br />
 
 <!-- prettier-ignore -->
-| Função            | Descrição                                                                                         |
-| ----------------- | ------------------------------------------------------------------------------------------------- |
+| Função            | Descrição         |
+| ----------------- | ----------------- |
 | `createAccessUrl` | Recebe os `parâmetros de configuração` e retorna uma URL válida para acesso ao Guiabolso Connect. |
 | `renderButton`    | Recebe os `parâmetros de configuração` e um `container` que é um elemento html onde o botão será renderizado.<br />Adicionalmente, é possível configurar o botão através do parâmetro `buttonConfig`, onde é possível alterar a `label` do botão e definir se o `icon`, deve ser exibido ou não. |
 | `renderIframe`    | Recebe os `parâmetros de configuração` e um `container` que é um elemento html onde o iframe será renderizado. Adicionalmente é possível configurar o iframe através do parâmetro `iframeConfig`, onde é possível alterar o `height` e o `width` do iframe. |
