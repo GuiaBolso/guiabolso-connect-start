@@ -13,9 +13,15 @@ type AccessConfigProps = {
   fallbackURL: string;
 };
 
+type MessageAuthCodeProps = {
+  data: { oauthcode: string };
+  origin: string;
+};
+
 type ConfigurationProps = {
   accessParameters: AccessConfigProps;
   container: Element;
+  onSuccess?: (value?: any) => any;
   buttonConfig?: Partial<CallToActionProps>;
   iframeConfig?: {
     height: number;
@@ -27,10 +33,7 @@ type RenderIframeProps = Omit<ConfigurationProps, 'buttonConfig'>;
 
 type RenderButtonProps = Omit<ConfigurationProps, 'iframeConfig'>;
 
-type MessageAuthCodeProps = {
-  data: { oauthcode: string };
-  origin: string;
-};
+type HandleSuccessProps = (oauthcode: string) => void;
 
 export {
   AccessConfigProps,
@@ -38,4 +41,5 @@ export {
   RenderIframeProps,
   RenderButtonProps,
   MessageAuthCodeProps,
+  HandleSuccessProps,
 };

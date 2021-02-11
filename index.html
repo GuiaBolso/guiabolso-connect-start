@@ -14,11 +14,10 @@
     <script src="./src/app.ts"></script>
 
     <script>
-      const { start } = gbConnect();
-
       window.addEventListener('load', () => {
+        const { start } = gbConnect();
+
         start({
-          container: document.querySelector('[data-gbc-container]'),
           accessParameters: {
             cpf: '92890487008',
             email: 'user@teste.com.br',
@@ -28,22 +27,12 @@
             callbackURL: 'https://connect.guiabolso.com.br/#/callback',
             fallbackURL: 'https://connect.guiabolso.com.br/#/fallback',
           },
+          container: document.querySelector('[data-gbc-container]'),
+          onSuccess: oauthcode => {
+            console.log(`@oauthcode: ${oauthcode}`);
+          },
         });
       });
-    </script>
-
-    <script>
-      const handleGBData = message => {
-        const hasAuthCode = message?.data?.oauthcode;
-        const isGBCOrigin = message?.origin === process.env.APP_ORIGIN;
-
-        if (isGBCOrigin && hasAuthCode) {
-          const oauthcode = message?.data?.oauthcode;
-          alert(`@oauthcode: ${oauthcode}`);
-        }
-      };
-
-      window.addEventListener('message', handleGBData, false);
     </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-import * as qs from 'query-string';
+import * as qs from 'qs';
 
 import { verifyCSP } from './utils';
 
@@ -8,11 +8,10 @@ import {
   RenderIframeProps,
   RenderButtonProps,
   MessageAuthCodeProps,
+  HandleSuccessProps,
 } from './typings/AppProps';
 
 export const gbConnect = () => {
-  'use strict';
-
   const GBC_URL = process.env.APP_ORIGIN || 'https://connect.guiabolso.com.br';
 
   const createAccessUrl = (accessParameters: AccessConfigProps) => {
@@ -26,7 +25,7 @@ export const gbConnect = () => {
     url && window.open(url, 'gbConnectWindow', 'width=992,height=820');
   };
 
-  const addStyleInPage = () => {
+  const addButtonStyle = () => {
     const $body = document.querySelector('body');
     const buttonStyle = `
       <style>
@@ -78,6 +77,17 @@ export const gbConnect = () => {
         }
       </style>
     `;
+
+    $body?.insertAdjacentHTML(
+      'beforeend',
+      `<div class="gbc-style">
+        ${buttonStyle}
+      </div>`
+    );
+  };
+
+  const addIframeStyle = () => {
+    const $body = document.querySelector('body');
     const iframeStyle = `
       <style>
         #gbc-iframe {
@@ -92,10 +102,33 @@ export const gbConnect = () => {
 
     $body?.insertAdjacentHTML(
       'beforeend',
-      `<div id="gbc-style">
-        ${buttonStyle}
+      `<div class="gbc-style">
         ${iframeStyle}
       </div>`
+    );
+  };
+
+  const addStyleInPage = () => {
+    addButtonStyle();
+    addIframeStyle();
+  };
+
+  const getOAuthCode = (message: MessageAuthCodeProps) => {
+    const hasAuthCode = message?.data?.oauthcode;
+    const isGBCOrigin = message?.origin === GBC_URL;
+
+    return isGBCOrigin && hasAuthCode ? message?.data?.oauthcode : false;
+  };
+
+  const closeIframeAfterReceiveOAuthcode = () => {
+    window.addEventListener(
+      'message',
+      message => {
+        const $iframe = document.querySelector('#gbc-iframe');
+        const hasAuthCode = getOAuthCode(message);
+        hasAuthCode && $iframe?.remove();
+      },
+      false
     );
   };
 
@@ -105,6 +138,8 @@ export const gbConnect = () => {
     buttonConfig = {},
   }: RenderButtonProps) => {
     if (!container) return;
+
+    addButtonStyle();
 
     const url = createAccessUrl(accessParameters);
     const { icon = true, label = 'Conectar com Guiabolso' } = buttonConfig;
@@ -119,7 +154,7 @@ export const gbConnect = () => {
       </button>
     `;
 
-    container.insertAdjacentHTML('beforeend', $button);
+    container.innerHTML = $button;
     container.addEventListener('click', clickEvent => {
       // @ts-ignore
       if (clickEvent.target.id === 'gbc-open') {
@@ -135,8 +170,9 @@ export const gbConnect = () => {
   }: RenderIframeProps) => {
     if (!container) return;
 
-    const { height, width } = iframeConfig;
+    addIframeStyle();
 
+    const { height, width } = iframeConfig;
     const url = createAccessUrl(accessParameters);
     const $iframe = `
       <iframe
@@ -148,17 +184,20 @@ export const gbConnect = () => {
       ></iframe>
     `;
 
-    container.insertAdjacentHTML('beforeend', $iframe);
+    container.innerHTML = $iframe;
+
+    closeIframeAfterReceiveOAuthcode();
   };
 
-  const closeIframeAfterReceiveOAuthcode = (message: MessageAuthCodeProps) => {
-    const hasAuthCode = message?.data?.oauthcode;
-    const $iframe = document.querySelector('#gbc-iframe');
-    const isGBCOrigin = message?.origin === GBC_URL;
-
-    if (isGBCOrigin && hasAuthCode) {
-      $iframe?.remove();
-    }
+  const handleSuccess = (callback: HandleSuccessProps) => {
+    window.addEventListener(
+      'message',
+      message => {
+        const oauthcode = getOAuthCode(message);
+        oauthcode && callback(oauthcode);
+      },
+      false
+    );
   };
 
   const start = ({
@@ -166,23 +205,13 @@ export const gbConnect = () => {
     container,
     buttonConfig,
     iframeConfig,
+    onSuccess,
   }: ConfigurationProps) => {
-    addStyleInPage();
-
     verifyCSP((hasCSP2: boolean) => {
-      if (hasCSP2) {
-        renderIframe({ container, accessParameters, iframeConfig });
-
-        window.addEventListener(
-          'message',
-          closeIframeAfterReceiveOAuthcode,
-          false
-        );
-
-        return;
-      }
-
-      renderButton({ container, accessParameters, buttonConfig });
+      hasCSP2
+        ? renderIframe({ container, accessParameters, iframeConfig })
+        : renderButton({ container, accessParameters, buttonConfig });
+      onSuccess && handleSuccess(onSuccess);
     });
   };
 
