@@ -27,7 +27,7 @@ npm i @guiabolsobr/guiabolso-connect-start
 Fazer a importação no seu arquivo javascript
 
 ```javascript
-import { gbConnect } from './js/app.js';
+import { gbConnect } from '@guiabolsobr/guiabolso-connect-start';
 
 const { start } = gbConnect();
 
