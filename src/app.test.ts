@@ -23,7 +23,7 @@ describe('Guiabolso Connect Start', () => {
     fallbackURL: 'https://connect.guiabolso.com.br/#/fallback',
   };
   const validGuiabolsoConnectUrl =
-    'https://connect.guiabolso.com.br/#/integracao?callbackURL=https%3A%2F%2Fconnect.guiabolso.com.br%2F%23%2Fcallback&clientId=40b4a56c-cd12-41de-bb3b-a909111d2580&cpf=92890487008&email=user%40teste.com.br&fallbackURL=https%3A%2F%2Fconnect.guiabolso.com.br%2F%23%2Ffallback&phone=11999999999&userTrackingId=development';
+    'https://connect.guiabolso.com.br/#/integracao?cpf=92890487008&email=user%40teste.com.br&phone=11999999999&userTrackingId=development&clientId=40b4a56c-cd12-41de-bb3b-a909111d2580&callbackURL=https%3A%2F%2Fconnect.guiabolso.com.br%2F%23%2Fcallback&fallbackURL=https%3A%2F%2Fconnect.guiabolso.com.br%2F%23%2Ffallback';
 
   const { open } = window;
 
@@ -50,7 +50,7 @@ describe('Guiabolso Connect Start', () => {
   it('should add the Guiabolso Connect elements style on page', () => {
     addStyleInPage();
 
-    expect(document.querySelector('#gbc-style')).toBeTruthy();
+    expect(document.querySelector('.gbc-style')).toBeTruthy();
   });
 
   it('should render the Guiabolso Connect button with custom label', () => {
