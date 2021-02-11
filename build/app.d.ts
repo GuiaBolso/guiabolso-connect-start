@@ -14,6 +14,7 @@ type AccessConfigProps = {
 type ConfigurationProps = {
     accessParameters: AccessConfigProps;
     container: Element;
+    onSuccess?: (value?: any) => any;
     buttonConfig?: Partial<CallToActionProps>;
     iframeConfig?: {
         height: number;
@@ -22,18 +23,12 @@ type ConfigurationProps = {
 };
 type RenderIframeProps = Omit<ConfigurationProps, 'buttonConfig'>;
 type RenderButtonProps = Omit<ConfigurationProps, 'iframeConfig'>;
-type MessageAuthCodeProps = {
-    data: {
-        oauthcode: string;
-    };
-    origin: string;
-};
 export const gbConnect: () => {
-    start: ({ accessParameters, container, buttonConfig, iframeConfig, }: ConfigurationProps) => void;
+    start: ({ accessParameters, container, buttonConfig, iframeConfig, onSuccess, }: ConfigurationProps) => void;
     createAccessUrl: (accessParameters: AccessConfigProps) => string;
     openPopup: (url: string) => void;
     addStyleInPage: () => void;
     renderButton: ({ container, accessParameters, buttonConfig, }: RenderButtonProps) => void;
     renderIframe: ({ container, accessParameters, iframeConfig, }: RenderIframeProps) => void;
-    closeIframeAfterReceiveOAuthcode: (message: MessageAuthCodeProps) => void;
+    closeIframeAfterReceiveOAuthcode: () => void;
 };
