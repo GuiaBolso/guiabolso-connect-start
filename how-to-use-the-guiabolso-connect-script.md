@@ -223,7 +223,7 @@ Tudo junto agora:
 
 ## Exemplo
 
-Você pode usar [esse arquivo modelo](https://github.com/GuiaBolso/guiabolso-connect-start/blob/master/_example/index.htmlß) como referência para a implementação.
+Você pode usar [esse arquivo modelo](https://github.com/GuiaBolso/guiabolso-connect-start/blob/master/_example/index.html) como referência para a implementação.
 
 PS: _É necessário servir a página através de um servidor._
 
