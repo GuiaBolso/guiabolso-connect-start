@@ -86,7 +86,9 @@ window.addEventListener('load', () => {
 | `start`           | É a função principal. Responsável por verificar a política de segurança necessária para funcionamento da experiência de forma embedada.<br />Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e inicia a aplicação, apresentando o botão do Guiabolso Connect ou a experiência de maneira incorporada na página.|
 | `createAccessUrl` | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e retorna uma URL válida para acesso ao Guiabolso Connect. |
 | `renderButton`    | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e um `container` que é um elemento html onde o botão será renderizado.<br />Adicionalmente, é possível configurar o botão através do parâmetro `buttonConfig`, onde é possível alterar a `label` do botão e definir se o `icon`, deve ser exibido ou não. |
-| `renderIframe`    | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e um `container` que é um elemento html onde o iframe será renderizado. Adicionalmente é possível configurar o iframe através do parâmetro `iframeConfig`, onde é possível alterar o `height` e o `width` do iframe. |
+| `renderIframe` \* | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e um `container` que é um elemento html onde o iframe será renderizado*. Adicionalmente é possível configurar o iframe através do parâmetro `iframeConfig`, onde é possível alterar o `height` e o `width` do iframe. |
+
+_\* Lembrando que a página onde o iframe será renderizado precisar estar minimamente aderente às Políticas de Segurança nível 2 (`Content-Security-Policy - CSP Level 2`)._
 
 <br />
 
