@@ -8,17 +8,27 @@
 
 <br />
 
-## Como usar o Guiabolso Connect Start
+## 🚀 Quick start
 
-- Para entender melhor **COMO USAR** esse script, você pode [consultar essa documentação](https://github.com/GuiaBolso/guiabolso-connect-start/blob/master/how-to-use-the-guiabolso-connect-script.md).
+Para rodar a aplicação em modo de desenvolvimento:
+
+```shell
+  npm start
+```
+
+A aplicação estará disponível localmente em [http://localhost:1234/](http://localhost:1234/)
 
 <br />
 
-## Como rodar o projeto deste repositório
+Para gerar o pacote final que vai para produção:
 
-- Para entender melhor **COMO RODAR** esse projeto, você pode [consultar essa documentação](https://github.com/GuiaBolso/guiabolso-connect-start/blob/master/how-to-run-the-guiabolso-connect-script-project).
+```shell
+  npm run build
+```
 
-<br />
+## Info
+
+This repository is using [Parcel](https://parceljs.org/getting_started.html) to bundle this application.
 
 ## Licença
 
