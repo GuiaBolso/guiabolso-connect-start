@@ -10,7 +10,6 @@ describe('Guiabolso Connect Start', () => {
     openPopup,
     addStyleInPage,
     renderButton,
-    renderIframe,
   } = gbConnect();
 
   const accessParameters = {
@@ -83,19 +82,5 @@ describe('Guiabolso Connect Start', () => {
     $button.dispatchEvent(clickEvent);
 
     expect(window.open).toBeCalled();
-  });
-
-  it('should render the Guiabolso Connect iframe with config props', () => {
-    renderIframe({
-      container: document.querySelector('body'),
-      accessParameters,
-      iframeConfig: { height: 500, width: 500 },
-    });
-
-    const $iframe = document.querySelector('#gbc-iframe');
-
-    expect($iframe).toBeTruthy();
-    expect($iframe.getAttribute('width')).toEqual('500');
-    expect($iframe.getAttribute('height')).toEqual('500');
   });
 });

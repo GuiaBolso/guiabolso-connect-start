@@ -519,12 +519,16 @@ var gbConnect = function gbConnect() {
       width: 395
     } : _ref2$iframeConfig;
     if (!container) return;
-    addIframeStyle();
-    var height = iframeConfig.height, width = iframeConfig.width;
-    var url = createAccessUrl(accessParameters);
-    var $iframe = ("\n      <iframe\n        id=\"gbc-iframe\"\n        frameborder=\"0\"\n        src=\"").concat(url, "\"\n        height=\"").concat(height, "\"\n        width=\"").concat(width, "\"\n      ></iframe>\n    ");
-    container.innerHTML = $iframe;
-    closeIframeAfterReceiveOAuthcode();
+    _utils.verifyCSP(function (hasCSP2) {
+      if (hasCSP2) {
+        addIframeStyle();
+        var height = iframeConfig.height, width = iframeConfig.width;
+        var url = createAccessUrl(accessParameters);
+        var $iframe = ("\n          <iframe\n            id=\"gbc-iframe\"\n            frameborder=\"0\"\n            src=\"").concat(url, "\"\n            height=\"").concat(height, "\"\n            width=\"").concat(width, "\"\n          ></iframe>\n        ");
+        container.innerHTML = $iframe;
+        closeIframeAfterReceiveOAuthcode();
+      }
+    });
   };
   var handleSuccess = function handleSuccess(callback) {
     window.addEventListener('message', function (message) {

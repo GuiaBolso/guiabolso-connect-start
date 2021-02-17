@@ -170,23 +170,27 @@ export const gbConnect = () => {
   }: RenderIframeProps) => {
     if (!container) return;
 
-    addIframeStyle();
+    verifyCSP((hasCSP2: boolean) => {
+      if (hasCSP2) {
+        addIframeStyle();
 
-    const { height, width } = iframeConfig;
-    const url = createAccessUrl(accessParameters);
-    const $iframe = `
-      <iframe
-        id="gbc-iframe"
-        frameborder="0"
-        src="${url}"
-        height="${height}"
-        width="${width}"
-      ></iframe>
-    `;
+        const { height, width } = iframeConfig;
+        const url = createAccessUrl(accessParameters);
+        const $iframe = `
+          <iframe
+            id="gbc-iframe"
+            frameborder="0"
+            src="${url}"
+            height="${height}"
+            width="${width}"
+          ></iframe>
+        `;
 
-    container.innerHTML = $iframe;
+        container.innerHTML = $iframe;
 
-    closeIframeAfterReceiveOAuthcode();
+        closeIframeAfterReceiveOAuthcode();
+      }
+    });
   };
 
   const handleSuccess = (callback: HandleSuccessProps) => {
