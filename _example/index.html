@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guiabolso Connect Start | Exemplo</title>
+  </head>
+
+  <body>
+    <h1>Guiabolso Connect Start</h1>
+
+    <!-- Container onde o botão do Guiabolso Connect ou a experiência completa do Guiabolso Connect será apresentado. -->
+    <div data-gbc-container></div>
+
+    <!-- Importação do script do Guiabolso Connect via CDN -->
+    <script src="https://connect-start.guiabolso.com.br/app.js"></script>
+
+    <!-- Inicialização da função start do Guiabolso Connect -->
+    <script>
+      window.addEventListener('load', () => {
+        const { start } = gbConnect();
+
+        start({
+          accessParameters: {
+            cpf: '99999999999',
+            email: 'email-do-usuario@email.com.br',
+            phone: '11999999999',
+            userTrackingId: 'um-identificador-unico-do-cliente',
+            clientId: '273117c3-e374-436c-a7ad-adba544872ba',
+            callbackURL: 'https://url-de-callback.com.br/',
+            fallbackURL: 'https://url-de-fallback.com.br/',
+          },
+          container: document.querySelector('[data-gbc-container]'),
+          onSuccess: oauthcode => {
+            console.log(`@oauthcode: ${oauthcode}`);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,3 +1,5 @@
 .parcel-cache
 .babelrc
 .env*
+_example
+.github

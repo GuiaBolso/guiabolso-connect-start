@@ -2,6 +2,17 @@
 
 O [Guiabolso Connect Start](https://github.com/GuiaBolso/guiabolso-connect-start#readme) é um script com o objetivo de facilitar a conexão com a aplicação do [Guiabolso Connect](https://guiabolsoconnect.com.br/)
 
+Ele serve para apresentar o botão do Guiabolso Connect e também apresentar a experiência de maneira incorporada na página.
+
+### Apresentando a experiência completa de maneira embedada e o botão de conexão
+
+<br />
+
+<!-- prettier-ignore -->
+| Experiência embedada | Conexão com o botão |
+| -------------------- | ------------------- |
+| ![guiabolso-connect-start__conexao-com-botao](https://user-images.githubusercontent.com/3269950/107272829-07b05000-6a2d-11eb-8acf-d17d321b96f0.gif) | ![guiabolso-connect-start__experiencia-embedada](https://user-images.githubusercontent.com/3269950/107272838-0b43d700-6a2d-11eb-8835-c32c53c0235c.gif) |
+
 <br />
 
 ## Como usar
@@ -48,7 +59,7 @@ window.addEventListener('load', () => {
 <html lang="pt-br">
   <body>
     <!-- Importação do CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.2.0/build/app.min.js"></script>
+    <script src="https://connect-start.guiabolso.com.br/app.js"></script>
 
     <script>
       window.addEventListener('load', () => {
@@ -85,14 +96,15 @@ A função `start` espera um objeto do tipo `accessParameters` com as configura�
 
 <br />
 
-| Parâmetros           | Tipo       | Obrigatoriedade | Exemplo de valores                     | Descrição                                                                                                                                                                                                       |
-| -------------------- | ---------- | --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`cpf`**            | _`String`_ | **Obrigatório** | 99999999999                            | Número do CPF do usuário<br />**Somente números**                                                                                                                                                               |
-| `email`              | _`String`_ | Opcional        | email-do-usuario@email.com.br          | Email do usuário                                                                                                                                                                                                |
-| `phone`              | _`String`_ | Opcional        | 11999999999                            | Número de telefone do usuário com DDD<br />**Somente números**                                                                                                                                                  |
-| **`clientId`**       | _`String`_ | **Obrigatório** | id-recebido-do-guiabolso-connect       | ID da sua chave de API recebido ao contratar o serviço do Guiabolsoo Conect                                                                                                                                     |
-| **`callbackURL`**    | _`String`_ | **Obrigatório** | https://url-de-callback.com.br/        | Redirecionaremos o usuário para essa URL logo após ele fazer a conexão com o Guiabolso Connect                                                                                                                  |
-| **`fallbackURL`**    | _`String`_ | **Obrigatório** | https://url-de-fallback.com.br/        | Caso ocorra um erro e/ou o usuário queira sair da aplicação, mandaremos ele para essa URL                                                                                                                       |
+<!-- prettier-ignore -->
+| Parâmetros           | Tipo       | Obrigatoriedade | Exemplo de valores                     | Descrição              |
+| -------------------- | ---------- | --------------- | -------------------------------------- | ---------------------- |
+| **`cpf`**            | _`String`_ | **Obrigatório** | 99999999999                            | Número do CPF do usuário<br />**Somente números** |
+| `email`              | _`String`_ | Opcional        | email-do-usuario@email.com.br          | Email do usuário                                  |
+| `phone`              | _`String`_ | Opcional        | 11999999999                            | Número de telefone do usuário com DDD<br />**Somente números**  |
+| **`clientId`**       | _`String`_ | **Obrigatório** | id-recebido-do-guiabolso-connect       | ID da sua chave de API recebido ao contratar o serviço do Guiabolsoo Conect |
+| **`callbackURL`**    | _`String`_ | **Obrigatório** | https://url-de-callback.com.br/        | Redirecionaremos o usuário para essa URL logo após ele fazer a conexão com o Guiabolso Connect |
+| **`fallbackURL`**    | _`String`_ | **Obrigatório** | https://url-de-fallback.com.br/        | Caso ocorra um erro e/ou o usuário queira sair da aplicação, mandaremos ele para essa URL |
 | **`userTrackingId`** | _`String`_ | **Obrigatório** | `273117c3-e374-436c-a7ad-adba544872ba` | Esse ID do usuário deve ser único e não sensível, ou seja, não use o CPF do usuário aqui mas use um UUID, por exemplo.<br />Essa informação será usada para rastrearmos seu usuário dentro da nossa plataforma. |
 
 <br />
@@ -109,73 +121,113 @@ Adicionalmente, a função `start` precisa e pode receber outros parâmetros:
 
 <br />
 
-### Passando os parâmetros de configuração para a função `Start`
+### Iniciando a aplicação com todas as configurações:
 
-Você pode chamar no seu arquivo javascript ou diretamente no HTML.
-Abaixo o exemplo está no HTML para contemplar tudo o que deve ser feito:
+Container onde o botão do Guiabolso Connect ou a experiência completa do Guiabolso Connect será apresentado.
+Esse botão deve ter um seletor único que será referenciado na função `start`.
 
 ```html
-<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guiabolso Connect Start</title>
-  </head>
+<!-- ... -->
+<body>
+  <div data-gbc-container></div>
+</body>
+<!-- ... -->
+```
 
-  <body>
-    <!--
-      Container onde o botão do Guiabolso Connect ou a
-      experiência completa do Guiabolso Connect será apresentado
-    -->
-    <div data-gbc-container></div>
+<br />
 
-    <!-- Script inicializador diretamente do CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.1.0/build/app.min.js"></script>
+Depois é necessário ter o nosso script na página.
+O exemplo abaixo considera a importação via CDN, mas é possível importar fazendo uso do `npm`, caso o seu projeto contemple isso.
 
-    <!--
-      Função `start` recebendo todos os parâmetros
-      iniciais que o Guiabolso Connect precisa
-    -->
-    <script>
+```html
+<!-- ... -->
+<body>
+  <script src="https://connect-start.guiabolso.com.br/app.js"></script>
+</body>
+<!-- ... -->
+```
+
+<br />
+
+Depois disso, é necessário passar todos os parâmetros de configuração para a função `start`, assim o Guiabolso Connect vai iniciar corretamente.
+
+```html
+<!-- ... -->
+<body>
+  <script>
+    window.addEventListener('load', () => {
       const { start } = gbConnect();
 
-      window.addEventListener('load', () => {
-        start({
-          container: document.querySelector('[data-gbc-container]'),
-          accessParameters: {
-            cpf: '99999999999',
-            email: 'email-do-usuario@email.com.br',
-            phone: '11999999999',
-            userTrackingId: 'um-identificador-unico-do-cliente',
-            clientId: 'id-recebido-do-guiabolso-connect',
-            callbackURL: 'https://url-de-callback.com.br/',
-            fallbackURL: 'https://url-de-fallback.com.br/',
-          },
-        });
+      start({
+        accessParameters: {
+          cpf: '99999999999',
+          email: 'email-do-usuario@email.com.br',
+          phone: '11999999999',
+          userTrackingId: 'um-identificador-unico-do-cliente',
+          clientId: '273117c3-e374-436c-a7ad-adba544872ba',
+          callbackURL: 'https://url-de-callback.com.br/',
+          fallbackURL: 'https://url-de-fallback.com.br/',
+        },
+        container: document.querySelector('[data-gbc-container]'),
+        onSuccess: oauthcode => {
+          console.log(`@oauthcode: ${oauthcode}`);
+        },
       });
-    </script>
-
-    <!--
-      Função que recebe o código de autorização
-      depois da conexão bem sucedida do usuário
-    -->
-    <script>
-      const handleGBData = message => {
-        const hasAuthCode = message?.data?.oauthcode;
-        const isGBCOrigin = message?.origin === 'https://connect.guiabolso.com.br;
-
-        if (isGBCOrigin && hasAuthCode) {
-          const oauthcode = message?.data?.oauthcode;
-          alert(`@oauthcode: ${oauthcode}`);
-        }
-      };
-
-      window.addEventListener('message', handleGBData, false);
-    </script>
-  </body>
-</html>
+    });
+  </script>
+</body>
+<!-- ... -->
 ```
+
+<br />
+
+Tudo junto agora:
+
+```html
+<body>
+  <h1>Guiabolso Connect Start</h1>
+
+  <!-- Container onde o botão do Guiabolso Connect ou a experiência completa do Guiabolso Connect será apresentado. -->
+  <div data-gbc-container></div>
+
+  <!-- Importação do script do Guiabolso Connect via CDN -->
+  <script src="https://connect-start.guiabolso.com.br/app.js"></script>
+
+  <!-- Inicialização da função start do Guiabolso Connect -->
+  <script>
+    window.addEventListener('load', () => {
+      const { start } = gbConnect();
+
+      start({
+        accessParameters: {
+          cpf: '99999999999',
+          email: 'email-do-usuario@email.com.br',
+          phone: '11999999999',
+          userTrackingId: 'um-identificador-unico-do-cliente',
+          clientId: '273117c3-e374-436c-a7ad-adba544872ba',
+          callbackURL: 'https://url-de-callback.com.br/',
+          fallbackURL: 'https://url-de-fallback.com.br/',
+        },
+        container: document.querySelector('[data-gbc-container]'),
+        onSuccess: oauthcode => {
+          console.log(`@oauthcode: ${oauthcode}`);
+        },
+      });
+    });
+  </script>
+</body>
+```
+
+<br />
+<br />
+
+## Exemplo
+
+Você pode usar esse arquivo modelo como referência para a implementação.
+
+PS: _É necessário servir a página através de um servidor._
+
+<br />
 
 <br />
 
@@ -183,8 +235,6 @@ Abaixo o exemplo está no HTML para contemplar tudo o que deve ser feito:
 
 Com tudo isso configurado, você deve conseguir visualizar o resultado no container que você definiu.
 Caso a sua página esteja minimamente aderente com as Políticas de Segurança nível 2 (`Content-Security-Policy - CSP Level 2`) você conseguirá visualizar a experiência completa do Guiabolso Connect embedada dentro da página, do contrário, você verá o botão de conexão do Guiabolso Connect.
-
-### Apresentando a experiência completa de maneira embedada e o botão de conexão
 
 <br />
 
