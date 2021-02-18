@@ -17,7 +17,7 @@ Ele serve para apresentar o botão do Guiabolso Connect e também apresentar a e
 
 ## Como usar
 
-Você pode encontrar e itilizar usar o nosso script:
+Você pode encontrar e utilizar o nosso script:
 
 - [Nosso repositório do GitHub](https://github.com/GuiaBolso/guiabolso-connect-start#readme)
 - [Diretamente do NPM](https://www.npmjs.com/package/@guiabolsobr/guiabolso-connect-start) através do comando `npm i @guiabolsobr/guiabolso-connect-start`
