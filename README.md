@@ -16,7 +16,7 @@
 
 ## Como rodar o projeto deste repositório
 
-- Para entender melhor **COMO RODAR** esse projeto, você pode [consultar essa documentação](https://github.com/GuiaBolso/guiabolso-connect-start/blob/master/how-to-run-the-guiabolso-connect-script-project).
+- Para entender melhor **COMO RODAR** esse projeto, você pode [consultar essa documentação](https://github.com/GuiaBolso/guiabolso-connect-start/blob/master/how-to-run-the-guiabolso-connect-script-project.md).
 
 <br />
 
