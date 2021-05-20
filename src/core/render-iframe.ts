@@ -1,19 +1,22 @@
 export declare type RenderIframeParams = {
-  container: HTMLElement;
+  container?: HTMLElement;
   src: string;
   config?: {
-    height?: number;
-    width?: number;
+    height?: number | string;
+    width?: number | string;
   };
 };
 
-export const dataIframe = 'data-guiabolso-connect-embedded'
+export const dataStyleIframe = 'data-guiabolso-connect-embedded';
 export const iframeId = 'guiabolso-connect-embedded';
 
-export function renderIframe ({ container, src, config }: RenderIframeParams) {
+export function renderIframe({ container, src, config }: RenderIframeParams) {
+  if (!container) {
+    return;
+  }
   injectIframeStyle();
 
-  const { height = 800, width = 395 } = config;
+  const { height = 800, width = 395 } = config ?? {};
 
   container.innerHTML = `
         <iframe
@@ -26,11 +29,11 @@ export function renderIframe ({ container, src, config }: RenderIframeParams) {
       `;
 }
 
-function injectIframeStyle () {
+function injectIframeStyle() {
   globalThis.document.head.insertAdjacentHTML(
     'beforeend',
     `
-    <style ${dataIframe}>
+    <style ${dataStyleIframe}>
       #${iframeId} {
         background: #ffffff;
         border-radius: 6px;

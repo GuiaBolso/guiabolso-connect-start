@@ -1,20 +1,23 @@
 export declare type RenderButtonParams = {
-  container: HTMLElement;
-  onClick(event: MouseEvent): void;
+  container?: HTMLElement;
+  onClick(event: ElementEventMap['fullscreenchange']): any;
   config?: {
     allowIcon?: boolean;
     label?: string;
   };
 };
 
-export const dataElement = 'data-gbc-style-button';
+export const dataButtonStyle = 'data-gbc-style-button';
 
-export function renderButton ({
+export function renderButton({
   container,
   onClick,
   config,
 }: RenderButtonParams) {
-  const { allowIcon = true, label = 'Conectar com Guiabolso' } = config;
+  if (!container) {
+    return;
+  }
+  const { allowIcon = true, label = 'Conectar com Guiabolso' } = config ?? {};
 
   insertStyleButton();
   const iconElement = allowIcon ? getSvgIcon() : '';
@@ -24,14 +27,14 @@ export function renderButton ({
   container.innerHTML = buttonElement;
 
   const $button = globalThis.document.querySelector('#gbc-open');
-  $button.addEventListener('click', onClick);
+  $button?.addEventListener('click', onClick);
 }
 
-function insertStyleButton () {
+function insertStyleButton() {
   globalThis.document.head.insertAdjacentHTML(
     'beforeend',
     `
-        <style ${dataElement}>
+        <style ${dataButtonStyle}>
           @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
     
           #gbc-open {
@@ -83,7 +86,7 @@ function insertStyleButton () {
   );
 }
 
-function getButton ({
+function getButton({
   iconElement,
   label,
 }: {
@@ -100,7 +103,7 @@ function getButton ({
   `;
 }
 
-function getSvgIcon () {
+function getSvgIcon() {
   return `
     <svg 
         class="gbc-open__icon"

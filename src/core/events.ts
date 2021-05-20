@@ -1,16 +1,16 @@
 export const events = [
   'load',
   'onboard',
-  'register',
+  'signup',
   'bank_list',
   'bank_not_found',
   'bank_selected',
-  'syncing',
+  'bank_offline',
+  'synced',
   'complete',
-  'back_finished',
   'back',
   'exit',
   'error',
 ] as const;
 
-export type EventsConnect = typeof events[number]
+export type EventsConnectKeys = typeof events[number];
