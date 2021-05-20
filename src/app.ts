@@ -56,7 +56,7 @@ export declare type CallbackPayload<K extends EventsConnectKeys> = {
   // eslint-disable-next-line camelcase
   bank_list(): void;
   // eslint-disable-next-line camelcase
-  bank_not_found(): void;
+  find_my_bank(): void;
   // eslint-disable-next-line camelcase
   bank_selected(): void;
   // eslint-disable-next-line camelcase

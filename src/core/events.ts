@@ -3,7 +3,7 @@ export const events = [
   'onboard',
   'signup',
   'bank_list',
-  'bank_not_found',
+  'find_my_bank',
   'bank_selected',
   'bank_offline',
   'synced',
