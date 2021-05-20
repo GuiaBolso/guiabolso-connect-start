@@ -6,13 +6,12 @@ window.addEventListener('load', () => {
     container: document?.querySelector('[data-gbc-container]'),
     environment: 'sandbox',
     callbackURL: 'https://connect.guiabolso.com.br/#/callback',
+    fallbackURL: 'https://connect.guiabolso.com.br/#/falback',
     config: {
-      hiddenHeader: true,
-      labelShareButton: '',
+      hiddenHeader: false,
     },
     data: {
       phone: '11999999999',
-      cpf: '99999999999',
       email: 'user@teste.com.br',
     },
     userTrackingId: 'development',

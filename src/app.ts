@@ -31,7 +31,7 @@ export declare type GuiabolsoConnectParams = {
     button: RenderButtonParams['config'];
   }>;
   data: {
-    cpf: string;
+    cpf?: string;
     email: string;
     phone: string;
   };
@@ -39,10 +39,7 @@ export declare type GuiabolsoConnectParams = {
   userTrackingId: string;
   clientId: string;
   callbackURL: string;
-  /**
-   * only when open a new window
-   */
-  fallbackURL?: string;
+  fallbackURL: string;
   /**
    * DOM element to render iframe or button
    */
