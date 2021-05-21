@@ -1,234 +1,171 @@
-import * as qs from 'qs';
+import 'regenerator-runtime/runtime';
+import './utils/globalthis-polyfill';
 
-import { verifyCSP } from './utils';
-
+import { buildQueryParams } from './utils/build-query-params';
+import { observer } from './core/observer';
 import {
-  AccessConfigProps,
-  ConfigurationProps,
-  RenderIframeProps,
-  RenderButtonProps,
-  MessageAuthCodeProps,
-  HandleSuccessProps,
-} from './typings/AppProps';
+  renderIframe,
+  RenderIframeParams,
+  dataStyleIframe,
+} from './core/render-iframe';
+import {
+  renderButton,
+  dataButtonStyle,
+  RenderButtonParams,
+} from './core/render-button';
+import { Envs, getOrigin } from './core/get-origin';
+import { verifyCSP } from './utils/verify-csp';
+import { events, EventsConnectKeys } from './core/events';
+import {
+  destroyInstances,
+  getInstance,
+  setInstanceValue,
+} from './utils/singleton';
 
-export const gbConnect = () => {
-  const GBC_URL = process.env.APP_ORIGIN || 'https://connect.guiabolso.com.br';
-
-  const createAccessUrl = (accessParameters: AccessConfigProps) => {
-    const urlParameters = qs.stringify(accessParameters);
-    const url = `${GBC_URL}/#/integracao?${urlParameters}`;
-
-    return url;
+export declare type GuiabolsoConnectParams = {
+  config?: Partial<{
+    hiddenHeader: boolean;
+    labelShareButton: string;
+    iframe: RenderIframeParams['config'];
+    window: RenderIframeParams['config'];
+    button: RenderButtonParams['config'];
+  }>;
+  data: {
+    cpf?: string;
+    email: string;
+    phone: string;
   };
-
-  const openPopup = (url: string) => {
-    url && window.open(url, 'gbConnectWindow', 'width=992,height=820');
-  };
-
-  const addButtonStyle = () => {
-    const $body = document.querySelector('body');
-    const buttonStyle = `
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
-
-        #gbc-open {
-          align-items: center;
-          background-color: #250048;
-          border-radius: 0.5rem;
-          border: 0;
-          box-shadow: none;
-          box-sizing: border-box;
-          cursor: pointer;
-          display: inline-flex;
-          justify-content: center;
-          margin: 0;
-          min-height: 3rem;
-          min-width: 312px;
-          outline: 0;
-          padding: 0px 1.5rem;
-          position: relative;
-          user-select: none;
-        }
-
-        #gbc-open .gbc-open__label {
-          pointer-events: none;
-          user-select: none;
-          line-height: 1.75;
-          letter-spacing: 0.02857em;
-          font-size: 1rem;
-          color: #ffffff;
-          box-sizing: border-box;
-          width: 100%;
-          align-items: inherit;
-          justify-content: inherit;
-          display: flex;
-          font-family: 'Open Sans';
-          font-weight: 600;
-          text-transform: none;
-        }
-
-        #gbc-open .gbc-open__icon {
-          user-select: none;
-          width: 20;
-          height: 25;
-          fill: none;
-          box-sizing: border-box;
-          margin-right: 0.625rem;
-        }
-      </style>
-    `;
-
-    $body?.insertAdjacentHTML(
-      'beforeend',
-      `<div class="gbc-style">
-        ${buttonStyle}
-      </div>`
-    );
-  };
-
-  const addIframeStyle = () => {
-    const $body = document.querySelector('body');
-    const iframeStyle = `
-      <style>
-        #gbc-iframe {
-          background: #ffffff;
-          border-radius: 6px;
-          border: 1px solid #f2f2f2;
-          box-shadow: 0px 0px 1px rgba(13, 13, 13, 0.2),
-            0px 2px 2px rgba(13, 13, 13, 0.14);
-        }
-      </style>
-    `;
-
-    $body?.insertAdjacentHTML(
-      'beforeend',
-      `<div class="gbc-style">
-        ${iframeStyle}
-      </div>`
-    );
-  };
-
-  const addStyleInPage = () => {
-    addButtonStyle();
-    addIframeStyle();
-  };
-
-  const getOAuthCode = (message: MessageAuthCodeProps) => {
-    const hasAuthCode = message?.data?.oauthcode;
-    const isGBCOrigin = message?.origin === GBC_URL;
-
-    return isGBCOrigin && hasAuthCode ? message?.data?.oauthcode : false;
-  };
-
-  const closeIframeAfterReceiveOAuthcode = () => {
-    window.addEventListener(
-      'message',
-      message => {
-        const $iframe = document.querySelector('#gbc-iframe');
-        const hasAuthCode = getOAuthCode(message);
-        hasAuthCode && $iframe?.remove();
-      },
-      false
-    );
-  };
-
-  const renderButton = ({
-    container,
-    accessParameters,
-    buttonConfig = {},
-  }: RenderButtonProps) => {
-    if (!container) return;
-
-    addButtonStyle();
-
-    const url = createAccessUrl(accessParameters);
-    const { icon = true, label = 'Conectar com Guiabolso' } = buttonConfig;
-    const $icon =
-      '<svg class="gbc-open__icon" width="20" height="25" fill="none"><path d="M19.2094 9.25008L10.9592 12.6876V15.2501L17.2392 12.6876C17.1161 16.6251 13.9145 19.8126 10.0357 19.8126C6.09531 19.8126 2.83218 16.5001 2.83218 12.4376C2.83218 8.37508 6.03374 5.06258 10.0357 5.06258C11.6981 5.06258 12.8063 5.43758 13.9145 6.31258L16.4388 5.25008C15.0228 3.68758 12.7447 2.62508 10.0357 2.62508C4.67923 2.62508 0.307861 7.00008 0.307861 12.4376C0.307861 17.8751 4.67923 22.2501 9.97414 22.2501C15.269 22.2501 19.702 17.8126 19.702 12.4376C19.702 11.3126 19.5788 10.2501 19.2094 9.25008Z" fill="#00C1EB"></path><path d="M19.702 5.12501L10.9592 8.81251V11.375L19.702 7.75001V5.12501Z" fill="#F9386A"></path></svg>';
-    const $button = `
-      <button id="gbc-open" type="button">
-        <span class="gbc-open__label">
-          ${icon ? $icon : ''}
-          ${label}
-        </span>
-      </button>
-    `;
-
-    container.innerHTML = $button;
-    container.addEventListener('click', clickEvent => {
-      // @ts-ignore
-      if (clickEvent.target.id === 'gbc-open') {
-        openPopup(url);
-      }
-    });
-  };
-
-  const renderIframe = ({
-    container,
-    accessParameters,
-    iframeConfig = { height: 800, width: 395 },
-  }: RenderIframeProps) => {
-    if (!container) return;
-
-    verifyCSP((hasCSP2: boolean) => {
-      if (hasCSP2) {
-        addIframeStyle();
-
-        const { height, width } = iframeConfig;
-        const url = createAccessUrl(accessParameters);
-        const $iframe = `
-          <iframe
-            id="gbc-iframe"
-            frameborder="0"
-            src="${url}"
-            height="${height}"
-            width="${width}"
-          ></iframe>
-        `;
-
-        container.innerHTML = $iframe;
-
-        closeIframeAfterReceiveOAuthcode();
-      }
-    });
-  };
-
-  const handleSuccess = (callback: HandleSuccessProps) => {
-    window.addEventListener(
-      'message',
-      message => {
-        const oauthcode = getOAuthCode(message);
-        oauthcode && callback(oauthcode);
-      },
-      false
-    );
-  };
-
-  const start = ({
-    accessParameters,
-    container,
-    buttonConfig,
-    iframeConfig,
-    onSuccess,
-  }: ConfigurationProps) => {
-    verifyCSP((hasCSP2: boolean) => {
-      hasCSP2
-        ? renderIframe({ container, accessParameters, iframeConfig })
-        : renderButton({ container, accessParameters, buttonConfig });
-      onSuccess && handleSuccess(onSuccess);
-    });
-  };
-
-  return {
-    start,
-    createAccessUrl,
-    openPopup,
-    addStyleInPage,
-    renderButton,
-    renderIframe,
-    closeIframeAfterReceiveOAuthcode,
-  };
+  environment?: Envs;
+  userTrackingId: string;
+  clientId: string;
+  callbackURL: string;
+  fallbackURL: string;
+  /**
+   * DOM element to render iframe or button
+   */
+  container: HTMLElement;
 };
 
+export declare type CallbackPayload<K extends EventsConnectKeys> = {
+  load(): void;
+  onboard(): void;
+  signup(): void;
+  // eslint-disable-next-line camelcase
+  bank_list(): void;
+  // eslint-disable-next-line camelcase
+  find_my_bank(): void;
+  // eslint-disable-next-line camelcase
+  bank_selected(): void;
+  // eslint-disable-next-line camelcase
+  bank_offline(): void;
+  synced(): void;
+  complete(params: { oauthcode: string }): void;
+  back(): void;
+  exit(params: {
+    reason: 'back_finished' | 'bank_not_found' | 'unknow' | 'user_cancel';
+  }): void;
+  error(err: Error): void;
+}[K];
+
+setInstanceValue('isDestroyed', false);
+
+export async function guiabolsoConnect({
+  container,
+  config,
+  data,
+  clientId,
+  userTrackingId,
+  callbackURL,
+  fallbackURL = '',
+  environment = 'sandbox',
+}: GuiabolsoConnectParams) {
+  const env =
+    (process.env.GUIABOSLO_CONNECT_ENVIRONMENT as Envs) || environment;
+  const domain = getOrigin(env);
+  const embedded = (await verifyCSP()) && Boolean(container);
+
+  const {
+    iframe: iframeConfig,
+    button: buttonConfig,
+    window: windowConfig,
+    ...configConnect
+  } = config ?? {};
+
+  const queryString = buildQueryParams({
+    ...data,
+    ...configConnect,
+    callbackURL,
+    clientId,
+    fallbackURL,
+    userTrackingId: environment === 'sandbox' ? 'development' : userTrackingId,
+    embedded,
+  });
+
+  const src =
+    process.env.TEST_EMITTER || `${domain}/#/integracao${queryString}`;
+
+  const observable = observer({
+    domain,
+    onEmmiter: ({ eventName }) => {
+      if (['exit', 'complete'].includes(eventName)) {
+        if (getInstance('windowParent')) {
+          getInstance('windowParent')?.close();
+        }
+      }
+    },
+  });
+
+  const openNewWindow = () => {
+    if (
+      process.env.GUIABOSLO_CONNECT_ENVIRONMENT === 'sandbox' &&
+      getInstance('isDestroyed')
+    ) {
+      throw new Error("You executed destroy function. Events don't work");
+    }
+
+    setInstanceValue(
+      'windowParent',
+      window.open(
+        src,
+        'gbConnectWindow',
+        `width=${windowConfig?.width || 992},height=${
+          windowConfig?.height || 820
+        }`
+      ) as Window & typeof globalThis
+    );
+  };
+
+  if (embedded) {
+    renderIframe({
+      config: iframeConfig,
+      src,
+      container,
+    });
+  }
+
+  if (!embedded) {
+    renderButton({ config: buttonConfig, container, onClick: openNewWindow });
+  }
+
+  return {
+    on: observable.on as <T extends EventsConnectKeys>(
+      event: T,
+      cb: CallbackPayload<T>
+    ) => void,
+    openNewWindow,
+    events,
+    destroy: () => {
+      setTimeout(() => {
+        destroyInstances();
+        globalThis.document?.querySelector(`[${dataButtonStyle}]`)?.remove();
+        globalThis.document?.querySelector(`[${dataStyleIframe}]`)?.remove();
+        container?.remove();
+        observable.destroy();
+        setInstanceValue('isDestroyed', true);
+      }, 2000);
+    },
+  };
+}
+
 // @ts-ignore
-window.gbConnect = gbConnect;
+globalThis.guiabolsoConnect = guiabolsoConnect;

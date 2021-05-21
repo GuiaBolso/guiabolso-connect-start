@@ -9,30 +9,27 @@
   <body>
     <h1>Guiabolso Connect Start</h1>
 
-    <div data-gbc-container></div>
+    <div style="width: 100%; display: flex;justify-content: space-between;align-items: flex-start;">
+      <div style="flex: 1;" data-gbc-container></div>
+      <div style="flex: 1;">
+        <h2>
+          Eventos emitidos
+        </h2>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;width: 100%">
+          <table style="width: 100%;text-align: left;">
+            <thead>
+              <tr>
+                <th>event</th>
+                <th>status</th>
+                <th>payload</th>
+              </tr>
+              <tbody id="list-events"></tbody>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
 
-    <script src="./src/app.ts"></script>
-
-    <script>
-      window.addEventListener('load', () => {
-        const { start } = gbConnect();
-
-        start({
-          accessParameters: {
-            cpf: '92890487008',
-            email: 'user@teste.com.br',
-            phone: '11999999999',
-            userTrackingId: 'development',
-            clientId: '40b4a56c-cd12-41de-bb3b-a909111d2580',
-            callbackURL: 'https://connect.guiabolso.com.br/#/callback',
-            fallbackURL: 'https://connect.guiabolso.com.br/#/fallback',
-          },
-          container: document.querySelector('[data-gbc-container]'),
-          onSuccess: oauthcode => {
-            console.log(`@oauthcode: ${oauthcode}`);
-          },
-        });
-      });
-    </script>
   </body>
+  <script src="./src/sandbox.ts"></script>
 </html>
