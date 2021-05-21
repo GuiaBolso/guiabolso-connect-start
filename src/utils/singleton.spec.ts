@@ -16,6 +16,6 @@ describe('singleton', () => {
   });
 
   it('force get instance', () => {
-    expect(getInstance('xpto' as 'isDestroyed')).toBeFalsy()
+    expect(getInstance('xpto' as 'isDestroyed')).toBeFalsy();
   });
 });
