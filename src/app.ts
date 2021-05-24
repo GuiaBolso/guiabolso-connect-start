@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime';
 import './utils/globalthis-polyfill';
 
 import { buildQueryParams } from './utils/build-query-params';
@@ -62,14 +61,19 @@ export declare type CallbackPayload<K extends EventsConnectKeys> = {
   complete(params: { oauthcode: string }): void;
   back(): void;
   exit(params: {
-    reason: 'back_finished' | 'bank_not_found' | 'unknow' | 'user_cancel';
+    reason:
+      | 'back_finished'
+      | 'bank_not_found'
+      | 'unknow'
+      | 'user_cancel'
+      | 'missing_params';
   }): void;
   error(err: Error): void;
 }[K];
 
 setInstanceValue('isDestroyed', false);
 
-export async function guiabolsoConnect({
+export function guiabolsoConnect({
   container,
   config,
   data,
@@ -82,89 +86,93 @@ export async function guiabolsoConnect({
   const env =
     (process.env.GUIABOSLO_CONNECT_ENVIRONMENT as Envs) || environment;
   const domain = getOrigin(env);
-  const embedded = (await verifyCSP()) && Boolean(container);
 
-  const {
-    iframe: iframeConfig,
-    button: buttonConfig,
-    window: windowConfig,
-    ...configConnect
-  } = config ?? {};
+  return verifyCSP().then((hasCSP) => {
+    const embedded = hasCSP && Boolean(container);
 
-  const queryString = buildQueryParams({
-    ...data,
-    ...configConnect,
-    callbackURL,
-    clientId,
-    fallbackURL,
-    userTrackingId: environment === 'sandbox' ? 'development' : userTrackingId,
-    embedded,
-  });
+    const {
+      iframe: iframeConfig,
+      button: buttonConfig,
+      window: windowConfig,
+      ...configConnect
+    } = config ?? {};
 
-  const src =
-    process.env.TEST_EMITTER || `${domain}/#/integracao${queryString}`;
+    const queryString = buildQueryParams({
+      ...data,
+      ...configConnect,
+      callbackURL,
+      clientId,
+      fallbackURL,
+      userTrackingId:
+        environment === 'sandbox' ? 'development' : userTrackingId,
+      embedded,
+    });
 
-  const observable = observer({
-    domain,
-    onEmmiter: ({ eventName }) => {
-      if (['exit', 'complete'].includes(eventName)) {
-        if (getInstance('windowParent')) {
-          getInstance('windowParent')?.close();
+    const src =
+      process.env.TEST_EMITTER || `${domain}/#/integracao${queryString}`;
+
+    const observable = observer({
+      domain,
+      onEmmiter: ({ eventName }) => {
+        if (['exit', 'complete'].includes(eventName)) {
+          if (getInstance('windowParent')) {
+            getInstance('windowParent')?.close();
+          }
         }
-      }
-    },
-  });
+      },
+    });
 
-  const openNewWindow = () => {
-    if (
-      process.env.GUIABOSLO_CONNECT_ENVIRONMENT === 'sandbox' &&
-      getInstance('isDestroyed')
-    ) {
-      throw new Error("You executed destroy function. Events don't work");
+    const openNewWindow = () => {
+      if (
+        process.env.GUIABOSLO_CONNECT_ENVIRONMENT === 'sandbox' &&
+        getInstance('isDestroyed')
+      ) {
+        throw new Error("You executed destroy function. Events don't work");
+      }
+
+      setInstanceValue(
+        'windowParent',
+        window.open(
+          src,
+          'gbConnectWindow',
+          `width=${windowConfig?.width || 992},height=${
+            windowConfig?.height || 820
+          }`
+        ) as Window & typeof globalThis
+      );
+    };
+
+    if (embedded) {
+      renderIframe({
+        config: iframeConfig,
+        src,
+        container,
+      });
     }
 
-    setInstanceValue(
-      'windowParent',
-      window.open(
-        src,
-        'gbConnectWindow',
-        `width=${windowConfig?.width || 992},height=${
-          windowConfig?.height || 820
-        }`
-      ) as Window & typeof globalThis
-    );
-  };
+    if (!embedded) {
+      renderButton({ config: buttonConfig, container, onClick: openNewWindow });
+    }
 
-  if (embedded) {
-    renderIframe({
-      config: iframeConfig,
-      src,
-      container,
-    });
-  }
-
-  if (!embedded) {
-    renderButton({ config: buttonConfig, container, onClick: openNewWindow });
-  }
-
-  return {
-    on: observable.on as <T extends EventsConnectKeys>(
-      event: T,
-      cb: CallbackPayload<T>
-    ) => void,
-    openNewWindow,
-    events,
-    destroy: () => {
-      setTimeout(() => {
-        destroyInstances();
-        globalThis.document?.querySelector(`[${dataButtonStyle}]`)?.remove();
-        globalThis.document?.querySelector(`[${dataStyleIframe}]`)?.remove();
-        container?.remove();
-        observable.destroy();
-        setInstanceValue('isDestroyed', true);
-      }, 2000);
-    },
-  };
+    return {
+      on: observable.on as <T extends EventsConnectKeys>(
+        event: T,
+        cb: CallbackPayload<T>
+      ) => void,
+      openNewWindow,
+      events,
+      destroy: () => {
+        setTimeout(() => {
+          destroyInstances();
+          globalThis.document?.querySelector(`[${dataButtonStyle}]`)?.remove();
+          globalThis.document?.querySelector(`[${dataStyleIframe}]`)?.remove();
+          container?.remove();
+          observable.destroy();
+          setInstanceValue('isDestroyed', true);
+        }, 2000);
+      },
+    };
+  });
 }
 
 // @ts-ignore

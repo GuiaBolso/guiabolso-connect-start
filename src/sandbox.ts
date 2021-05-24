@@ -11,6 +11,7 @@ window.addEventListener('load', () => {
       hiddenHeader: false,
     },
     data: {
+      cpf: '99999999999',
       phone: '11999999999',
       email: 'user@teste.com.br',
     },

@@ -1,4 +1,4 @@
-declare const events: readonly ["load", "onboard", "signup", "bank_list", "bank_not_found", "bank_selected", "bank_offline", "synced", "complete", "back", "exit", "error"];
+declare const events: readonly ["load", "onboard", "signup", "bank_list", "find_my_bank", "bank_selected", "bank_offline", "synced", "complete", "back", "exit", "error"];
 type EventsConnectKeys = typeof events[number];
 type RenderIframeParams = {
     container?: HTMLElement;
@@ -26,7 +26,7 @@ export type GuiabolsoConnectParams = {
         button: RenderButtonParams['config'];
     }>;
     data: {
-        cpf: string;
+        cpf?: string;
         email: string;
         phone: string;
     };
@@ -34,10 +34,7 @@ export type GuiabolsoConnectParams = {
     userTrackingId: string;
     clientId: string;
     callbackURL: string;
-    /**
-     * only when open a new window
-     */
-    fallbackURL?: string;
+    fallbackURL: string;
     /**
      * DOM element to render iframe or button
      */
@@ -48,7 +45,7 @@ export type CallbackPayload<K extends EventsConnectKeys> = {
     onboard(): void;
     signup(): void;
     bank_list(): void;
-    bank_not_found(): void;
+    find_my_bank(): void;
     bank_selected(): void;
     bank_offline(): void;
     synced(): void;
@@ -57,13 +54,13 @@ export type CallbackPayload<K extends EventsConnectKeys> = {
     }): void;
     back(): void;
     exit(params: {
-        reason: 'back_finished' | 'bank_not_found' | 'unknow' | 'user_cancel';
+        reason: 'back_finished' | 'bank_not_found' | 'unknow' | 'user_cancel' | 'missing_params';
     }): void;
     error(err: Error): void;
 }[K];
 export function guiabolsoConnect({ container, config, data, clientId, userTrackingId, callbackURL, fallbackURL, environment, }: GuiabolsoConnectParams): Promise<{
-    on: <T extends "error" | "exit" | "complete" | "load" | "onboard" | "signup" | "bank_list" | "bank_not_found" | "bank_selected" | "bank_offline" | "synced" | "back">(event: T, cb: CallbackPayload<T>) => void;
+    on: <T extends "error" | "exit" | "complete" | "load" | "onboard" | "signup" | "bank_list" | "find_my_bank" | "bank_selected" | "bank_offline" | "synced" | "back">(event: T, cb: CallbackPayload<T>) => void;
     openNewWindow: () => void;
-    events: readonly ["load", "onboard", "signup", "bank_list", "bank_not_found", "bank_selected", "bank_offline", "synced", "complete", "back", "exit", "error"];
+    events: readonly ["load", "onboard", "signup", "bank_list", "find_my_bank", "bank_selected", "bank_offline", "synced", "complete", "back", "exit", "error"];
     destroy: () => void;
 }>;

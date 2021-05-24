@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["@types", "node_modules/@types", "src/process.d.ts"],
     "declaration": true,
     "target": "es5",
     "lib": [
@@ -7,6 +8,8 @@
       "dom.iterable",
       "esnext"
     ],
+    "module": "esnext",
+    "moduleResolution": "node",
     "allowJs": true
   }
 }
