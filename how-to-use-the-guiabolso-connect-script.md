@@ -23,7 +23,7 @@ Você pode encontrar e utilizar o nosso script:
 - [Diretamente do NPM](https://www.npmjs.com/package/@guiabolsobr/guiabolso-connect-start) através do comando `npm i @guiabolsobr/guiabolso-connect-start`
 - Ou usar diretamente via CDN:
   - https://connect-start.guiabolso.com.br/app.js
-  - https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.2.0/build/app.min.js
+  - https://cdn.jsdelivr.net/npm/@guiabolsobr/guiabolso-connect-start@1.4.2/build/app.min.js
 
 <br />
 
@@ -38,16 +38,22 @@ npm i @guiabolsobr/guiabolso-connect-start
 
 Fazer a importação no seu arquivo javascript
 
-```javascript
-import { gbConnect } from '@guiabolsobr/guiabolso-connect-start';
+```ts
+import { guiabolsoConnect } from '@guiabolsobr/guiabolso-connect-start';
 
-window.addEventListener('load', () => {
-  const { start } = gbConnect();
-
-  start({
+(async () => {
+  const connect = await guiabolsoConnect({
     /* Parâmetros de configuração do Guiabolso Connect */
   });
-});
+
+  connect.on('load', () => {
+    console.log('aplicação carregou');
+  });
+
+  connect.on('complete', ({ oauthcode }) => {
+    console.log('code', oauthcode);
+  });
+})();
 ```
 
 <br />
@@ -62,13 +68,19 @@ window.addEventListener('load', () => {
     <script src="https://connect-start.guiabolso.com.br/app.js"></script>
 
     <script>
-      window.addEventListener('load', () => {
-        const { start } = gbConnect();
-
-        start({
+      (async () => {
+        const connect = await guiabolsoConnect({
           /* Parâmetros de configuração do Guiabolso Connect */
         });
-      });
+
+        connect.on('load', () => {
+          console.log('aplicação carregou');
+        });
+
+        connect.on('complete', ({ oauthcode }) => {
+          console.log('code', oauthcode);
+        });
+      })();
     </script>
   </body>
 </html>
@@ -80,46 +92,57 @@ window.addEventListener('load', () => {
 
 <br />
 
-<!-- prettier-ignore -->
-| Função            | Descrição         |
-| ----------------- | ----------------- |
-| `start`           | É a função principal. Responsável por verificar a política de segurança necessária para funcionamento da experiência de forma embedada.<br />Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e inicia a aplicação, apresentando o botão do Guiabolso Connect ou a experiência de maneira incorporada na página.|
-| `createAccessUrl` | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e retorna uma URL válida para acesso ao Guiabolso Connect. |
-| `renderButton`    | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e um `container` que é um elemento html onde o botão será renderizado.<br />Adicionalmente, é possível configurar o botão através do parâmetro `buttonConfig`, onde é possível alterar a `label` do botão e definir se o `icon`, deve ser exibido ou não. |
-| `renderIframe` \* | Recebe os [`parâmetros de configuração`](#parâmetros-de-configuração-da-função-start) e um `container` que é um elemento html onde o iframe será renderizado*. Adicionalmente é possível configurar o iframe através do parâmetro `iframeConfig`, onde é possível alterar o `height` e o `width` do iframe. |
+### Parâmetros de configuração da função `guiabolsoConnect`:
 
-_\* Lembrando que a página onde o iframe será renderizado precisar estar minimamente aderente às Políticas de Segurança nível 2 (`Content-Security-Policy - CSP Level 2`)._
-
-<br />
-
-### Parâmetros de configuração da função `start`:
-
-A função `start` espera um objeto do tipo `accessParameters` com as configurações para que a aplicação seja iniciada. São eles:
+A função `guiabolsoConnect` espera um objeto com as configurações para que a aplicação seja iniciada. São eles:
 
 <br />
 
 <!-- prettier-ignore -->
 | Parâmetros           | Tipo       | Obrigatoriedade | Exemplo de valores                     | Descrição              |
 | -------------------- | ---------- | --------------- | -------------------------------------- | ---------------------- |
-| **`cpf`**            | _`String`_ | **Obrigatório** | 99999999999                            | Número do CPF do usuário<br />**Somente números** |
-| `email`              | _`String`_ | Opcional        | email-do-usuario@email.com.br          | Email do usuário                                  |
-| `phone`              | _`String`_ | Opcional        | 11999999999                            | Número de telefone do usuário com DDD<br />**Somente números**  |
+| **`data.cpf`**            | _`String`_ | **Obrigatório** | 99999999999                            | Número do CPF do usuário<br />**Somente números** |
+| `data.email`              | _`String`_ | Opcional        | email-do-usuario@email.com.br          | Email do usuário                                  |
+| `data.phone`              | _`String`_ | Opcional        | 11999999999                            | Número de telefone do usuário com DDD<br />**Somente números**  |
 | **`clientId`**       | _`String`_ | **Obrigatório** | id-recebido-do-guiabolso-connect       | ID da sua chave de API recebido ao contratar o serviço do Guiabolsoo Conect |
 | **`callbackURL`**    | _`String`_ | **Obrigatório** | https://url-de-callback.com.br/        | Redirecionaremos o usuário para essa URL logo após ele fazer a conexão com o Guiabolso Connect |
 | **`fallbackURL`**    | _`String`_ | **Obrigatório** | https://url-de-fallback.com.br/        | Caso ocorra um erro e/ou o usuário queira sair da aplicação, mandaremos ele para essa URL |
 | **`userTrackingId`** | _`String`_ | **Obrigatório** | `273117c3-e374-436c-a7ad-adba544872ba` | Esse ID do usuário deve ser único e não sensível, ou seja, não use o CPF do usuário aqui mas use um UUID, por exemplo.<br />Essa informação será usada para rastrearmos seu usuário dentro da nossa plataforma. |
+| **`environment`** | _`sandbox` | `production` _ | **Obrigatório** | Para o desenvolvimento de testes, use o `sandbox` e `production` para o ambiente de produção. Ex: `process.env.NODE_ENV !== 'production' ? 'sandbox' : 'production' ` |
+| **`container`** | _HTMLElement_ | **Obrigatório** | Elemento ao qual iremos renderizar o iframe |
+| **`config`** | _Object_ | Opcional | Configurações diversas |
+
+_\* Lembrando que a página onde o iframe será renderizado precisar estar minimamente aderente às Políticas de Segurança nível 2 (`Content-Security-Policy - CSP Level 2`)._
+
+### Ao executar a função `guiabolsoConnect`, é retornado funções de auxílio:
 
 <br />
 
-Adicionalmente, a função `start` precisa e pode receber outros parâmetros:
+<!-- prettier-ignore -->
+| Função            | Descrição         |
+| ----------------- | ----------------- |
+| `on`           | função principal responsável por receber os eventos e chamar os [callbacks](#Eventos-e-Callbacks)|
+| `openNewWindow` | abre a experiência pop up do Guiabolso Connect. |
+| `destroy`    | função responsável por "limpar" remover alocações de memória e eventos |
 
-| Parâmetros                                                            | Tipo         | Obrigatoriedade | Exemplo de valores                                                        | Descrição                                                                                                                                                               |
-| --------------------------------------------------------------------- | ------------ | --------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **[`accessParameters`](#parâmetros-de-configuração-da-função-start)** | _`Objeto`_   | **Obrigatório** | [`accessParameters`](#parâmetros-de-configuração-da-função-start)         | Parâmetros de configuração                                                                                                                                              |
-| **`container`**                                                       | _`Element`_  | **Obrigatório** | `document.querySelector('[data-gbc-container]')`                          | Elemento HTML (container) onde a aplicação deve ser renderizada                                                                                                         |
-| **`onSuccess`**                                                       | _`Function`_ | **Obrigatório** | `getOAuthCodeAndDoSomething(oAuthCode) => { console.log({ oAuthCode }) }` | Elemento HTML (container) onde a aplicação deve ser renderizada                                                                                                         |
-| `buttonConfig`                                                        | _`Object`_   | Opcional        | `{ label: string, icon: boolean }`                                        | Com essas configurações é possível trocar o texto do botão e, devidir se ele deve ou não apresentar a identidade do Guiabolso Connect                                   |
-| `iframeConfig`                                                        | _`Object`_   | Opcional        | `{ height: number, width: number }`                                       | Com essas configurações é possível definir o tamanho da área onde a experiência será apresentada.<br />Por padrão, o tamanho da área é de `{ height: 800, width: 395 }` |
+<br />
+
+### Eventos e Callbacks
+
+|    evento    | parâmetro | descrição |
+| :---------: | :----------: | :----------: |
+| load | void | evento é emitido quando carrega a aplicação |
+| onboard | void | evento é emitido quando carrega a tela onboarding |
+| signup | void | evento é emitido quando carrega a tela de signup |
+| bank_list | void | evento é emitido quando carrega a tela de lista de bancos |
+| find_my_bank | void | evento é emitido quando carrega a tela de procurar banco |
+| bank_selected | void | evento é emitido quando carrega a tela de registro de banco |
+| bank_offline | void | evento é emitido quando o banco está offline |
+| synced | void | evento é emitido quando termina de sincronizar o banco |
+| complete | ``` { oauthcode: string } ``` | evento executa quando termina o fluxo |
+| back | void | evento é emitido quando o usuário clica no botão voltar  |
+| exit | ```{ reason: 'back_finished' 'bank_not_found' 'unknow' 'user_cancel' }``` | evento é emitido quando o usuário sai da aplicação |
+| error | Error | evento é emitido quando o usuário recebe um erro |
 
 <br />
 
@@ -157,23 +180,26 @@ Depois disso, é necessário passar todos os parâmetros de configuração para 
 <!-- ... -->
 <body>
   <script>
-    window.addEventListener('load', () => {
-      const { start } = gbConnect();
-
-      start({
-        accessParameters: {
+    window.addEventListener('load', async () => {
+      const connect = await guiabolsoConnect({
+        clientId: '40b4a56c-cd12-41de-bb3b-a909111d2580',
+        container: document?.querySelector('[data-gbc-container]'),
+        environment: 'sandbox',
+        callbackURL: 'https://url-de-callback.com.br/',
+        fallbackURL: 'https://url-de-fallback.com.br/',
+        config: {
+          hiddenHeader: false,
+        },
+        data: {
           cpf: '99999999999',
-          email: 'email-do-usuario@email.com.br',
           phone: '11999999999',
-          userTrackingId: 'um-identificador-unico-do-cliente',
-          clientId: '273117c3-e374-436c-a7ad-adba544872ba',
-          callbackURL: 'https://url-de-callback.com.br/',
-          fallbackURL: 'https://url-de-fallback.com.br/',
+          email: 'email-do-usuario@email.com.br',
         },
-        container: document.querySelector('[data-gbc-container]'),
-        onSuccess: oauthcode => {
-          console.log(`@oauthcode: ${oauthcode}`);
-        },
+        userTrackingId: 'um-identificador-unico-do-cliente',
+      });
+
+      connect.on('complete', ({ oauthcode }) => {
+        console.log(`@oauthcode: ${oauthcode}`);
       });
     });
   </script>
@@ -183,7 +209,7 @@ Depois disso, é necessário passar todos os parâmetros de configuração para 
 
 <br />
 
-Tudo junto agora:
+Agora, tudo junto:
 
 ```html
 <body>
@@ -197,23 +223,26 @@ Tudo junto agora:
 
   <!-- Inicialização da função start do Guiabolso Connect -->
   <script>
-    window.addEventListener('load', () => {
-      const { start } = gbConnect();
-
-      start({
-        accessParameters: {
+    window.addEventListener('load', async () => {
+      const connect = await guiabolsoConnect({
+        clientId: '40b4a56c-cd12-41de-bb3b-a909111d2580',
+        container: document?.querySelector('[data-gbc-container]'),
+        environment: 'sandbox',
+        callbackURL: 'https://url-de-callback.com.br/',
+        fallbackURL: 'https://url-de-fallback.com.br/',
+        config: {
+          hiddenHeader: false,
+        },
+        data: {
           cpf: '99999999999',
-          email: 'email-do-usuario@email.com.br',
           phone: '11999999999',
-          userTrackingId: 'um-identificador-unico-do-cliente',
-          clientId: '273117c3-e374-436c-a7ad-adba544872ba',
-          callbackURL: 'https://url-de-callback.com.br/',
-          fallbackURL: 'https://url-de-fallback.com.br/',
+          email: 'email-do-usuario@email.com.br',
         },
-        container: document.querySelector('[data-gbc-container]'),
-        onSuccess: oauthcode => {
-          console.log(`@oauthcode: ${oauthcode}`);
-        },
+        userTrackingId: 'um-identificador-unico-do-cliente',
+      });
+
+      connect.on('complete', ({ oauthcode }) => {
+        console.log(`@oauthcode: ${oauthcode}`);
       });
     });
   </script>
