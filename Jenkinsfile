@@ -2,6 +2,7 @@
 if (env.BRANCH_NAME == "master") {
     ciKubernetesDeploy {
         jobName = "guiabolso-connect-start"
+        serviceNamespace = "connect"
     }
 } 
 
